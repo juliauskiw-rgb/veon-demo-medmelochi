@@ -1,0 +1,74 @@
+/* Hallmark · shape: tray-catalog · genre: modern-minimal · theme: custom · job: buy · idea: "Каталог MEDmelochi — медична укладка: чотири кольори логотипа розкладають асортимент по відсіках, площа відсіку — реальна кількість позицій" · vibe: "steel tray, exact, dense, calm, instrument-grade"
+ * paper: #ECEEEB · accent: #1A64B0 · display: Geologica · body: Onest · hero: typographic H1 on 8 columns, white call block on the right, top row of the tray already in the fold · nav: sticky bar, 4 anchors + free-line phone · footer: light, logo, phones, legal FutureLinks · imagery: client photos · surface: absolute · signature: tray of compartments sized by item count + order-sum ruler 1000/2500/5000
+ * axes: steel/geometric-sharp/wordmark-blue · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: imagery (client photos are small marketplace cut-outs), kept them small inside white compartments with contain, numbers carry the cells */
+/* Hallmark · waive 7b · --color-surface #FFFFFF (concept §5, §8.3) · client category photos are cut-outs on pure white; a tinted surface would show their white boxes */
+/* Hallmark · waive 39b · a.act__call 64px · concept §8.6/§8.13: the free-line call is the one main action, 56–64px by the approved design */
+/* Hallmark · waive 59 · hero→catalog 40px · UX §10.3 and concept §8.6: the top row of the tray must be visible in the 1440×900 fold */
+/* Hallmark · waive 11 · .cell__img scale 1.03 on hover · concept §8.9 effect 3, 200 ms, off for reduced motion */
+/* Hallmark · answered F4 · .btn--light is the same primary button inverted for the dark wholesale band (concept §8.13); each section still has exactly one filled button */
+/* Hallmark · waive 44c · hero ends near 550px of 900 and the call block is not centred on the headline · UX §10.3 and concept §8.6 put the catalog tray inside the first screen, so the fold holds the headline, the call block and the tray together */
+/* Hallmark · dismissed 28a · the first Tisson photo sits far below the fold; the LCP element is the hero headline text, so lazy loading is correct here */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md); waivers go right below it. */
+/* Client design tokens — only from design/concept.md (§8.3 palette, §8.4 type, §8.5 grid). */
+:root {
+  /* palette */
+  --color-bg: #ECEEEB;          /* steel tray */
+  --color-surface: #FFFFFF;     /* compartments */
+  --color-text: #15191D;        /* graphite, also primary action */
+  --color-primary: #15191D;
+  --color-primary-hover: #2B3238;
+  --color-muted: #4A524D;
+  --color-accent: #1A64B0;      /* wordmark blue, deepened to AA */
+  --color-accent-hover: #124C88;
+  --color-border: #7A847E;
+  --color-line: #C9CFCB;
+  --color-dark: #15191D;
+  --color-on-dark: #ECEEEB;
+  --color-on-dark-muted: #A9B1AC;
+  --color-focus-dark: #6FB1F2;
+  /* direction codes from the logo — markers and edges only, always with a text label */
+  --code-vet: #FEB000;
+  --code-lab: #1396EE;
+  --code-consumables: #FF573E;
+  --code-surgery: #33A401;
+
+  /* type */
+  --font-display: "Geologica", "Geologica Fallback", system-ui, sans-serif;
+  --font-body: "Onest", "Onest Fallback", system-ui, sans-serif;
+  --fs-1: 0.875rem;                                         /* 14 */
+  --fs-2: clamp(1rem, 0.977rem + 0.095vw, 1.0625rem);       /* 16 → 17 */
+  --fs-3: clamp(1.1875rem, 1.118rem + 0.286vw, 1.375rem);   /* 19 → 22 */
+  --fs-4: clamp(1.5rem, 1.36rem + 0.571vw, 1.875rem);       /* 24 → 30 */
+  --fs-5: clamp(1.875rem, 1.55rem + 1.333vw, 2.75rem);      /* 30 → 44 */
+  --fs-6: clamp(2.25rem, 1.6rem + 2.667vw, 4rem);           /* 36 → 64 */
+  --lh-tight: 1.08;
+  --lh-head: 1.15;
+  --lh-text: 1.5;
+
+  /* space: 8px rhythm */
+  --s-1: 0.5rem;   /* 8 */
+  --s-2: 1rem;     /* 16 */
+  --s-3: 1.5rem;   /* 24 */
+  --s-4: 2.5rem;   /* 40 */
+  --s-5: 4rem;     /* 64 */
+  --s-6: 6rem;     /* 96 */
+  --s-7: 8rem;     /* 128 */
+  --section: clamp(4rem, 2.6rem + 5.7vw, 7.5rem);
+  --space: clamp(1.25rem, 0.32rem + 3.81vw, 3.75rem);       /* page side padding 20 → 60 */
+  --gutter: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+  --container: 1320px;
+  --seam: 4px;                                              /* steel seams of the tray */
+
+  /* shape & motion */
+  --radius: 4px;
+  --header-h: 64px;
+  --tap: 44px;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+  --dur-fast: 200ms;
+  --dur-press: 120ms;
+}
+@media (min-width: 1024px) {
+  :root { --header-h: 72px; }
+}

@@ -1,0 +1,182 @@
+---
+import Logo from "./Logo.astro";
+import PhoneIcon from "./PhoneIcon.astro";
+import { mainPhone, phones, email } from "../data/site";
+
+const nav = [
+  { href: "#catalog", label: "Каталог" },
+  { href: "#delivery", label: "Доставка та оплата" },
+  { href: "#wholesale", label: "Гуртовим клієнтам" },
+  { href: "#contacts", label: "Контакти" },
+];
+const menu = [
+  nav[0],
+  { href: "#tisson", label: "Tisson Medical" },
+  nav[1],
+  nav[2],
+  { href: "#about", label: "Про компанію" },
+  nav[3],
+];
+---
+<header class="hdr" data-header data-rec="R-UX-03,R-UX-15">
+  <div class="container hdr__in">
+    <Logo />
+
+    <nav class="hdr__nav" aria-label="Розділи сторінки">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="hdr__contact">
+      <a class="hdr__email link" href={`mailto:${email}`}>{email}</a>
+      <a class="hdr__phone" href={mainPhone.href}>
+        <span class="num">{mainPhone.display}</span>
+        <span class="hdr__free">безкоштовно</span>
+      </a>
+    </div>
+
+    <a class="hdr__call btn btn--primary" href={mainPhone.href} aria-label={`Дзвінок на безкоштовну лінію ${mainPhone.display}`}>
+      <PhoneIcon />
+      <span>Дзвінок</span>
+    </a>
+
+    <details class="menu" data-menu>
+      <summary class="menu__btn">
+        <span class="menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="visually-hidden">Меню</span>
+      </summary>
+      <div class="menu__panel">
+        <nav aria-label="Меню">
+          <ul class="menu__list">
+            {menu.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          </ul>
+        </nav>
+        <ul class="menu__phones">
+          {phones.map((p) => (
+            <li>
+              <a href={p.href}><span class="num">{p.display}</span><span class="menu__label">{p.label}</span></a>
+            </li>
+          ))}
+          <li><a href={`mailto:${email}`}><span>{email}</span><span class="menu__label">E-mail</span></a></li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .hdr.is-scrolled { border-bottom-color: var(--color-line); }
+  .hdr__in { display: flex; align-items: center; gap: var(--s-1); height: var(--header-h); }
+  .hdr__nav, .hdr__contact { display: none; }
+
+  .hdr__call { margin-left: auto; min-height: var(--tap); padding: 0 var(--s-2); gap: var(--s-1); font-size: var(--fs-1); }
+  .hdr__call :global(.btn__icon) { width: 18px; height: 18px; }
+
+  /* Burger built on <details>: works without scripts. */
+  .menu { position: static; }
+  .menu__btn {
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    border: 1.5px solid var(--color-primary);
+    border-radius: var(--radius);
+    cursor: pointer;
+    list-style: none;
+  }
+  .menu__btn::-webkit-details-marker { display: none; }
+  .menu__bars { display: grid; gap: 4px; width: 18px; }
+  .menu__bars i { display: block; height: 2px; background: var(--color-text); border-radius: 1px; transition: transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out); }
+  .menu[open] .menu__bars i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .menu[open] .menu__bars i:nth-child(2) { opacity: 0; }
+  .menu[open] .menu__bars i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .menu__panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--header-h);
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    padding: var(--s-1) var(--space) var(--s-4);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .menu__list a {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    border-bottom: 1px solid var(--color-line);
+    font: 600 var(--fs-3)/1.2 var(--font-display);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .menu__phones { margin-top: var(--s-3); display: grid; gap: 2px; }
+  .menu__phones a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-2);
+    min-height: 52px;
+    padding: 0 var(--s-2);
+    background: var(--color-surface);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .menu__label { font-weight: 400; font-size: var(--fs-1); color: var(--color-muted); }
+
+  @media (min-width: 1024px) {
+    .hdr__in { gap: var(--s-4); }
+    .hdr__call, .menu { display: none; }
+    .hdr__nav { display: block; }
+    .hdr__nav ul { display: flex; gap: var(--s-3); }
+    .hdr__nav a {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-weight: 500;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .hdr__nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 8px;
+      height: 2px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+    .hdr__nav a:hover::after { transform: scaleX(1); }
+    .hdr__contact { display: flex; align-items: center; gap: var(--s-3); margin-left: auto; }
+    .hdr__email { display: none; font-size: var(--fs-1); }
+    .hdr__phone {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      min-height: var(--tap);
+      text-decoration: none;
+      line-height: 1.15;
+    }
+    .hdr__phone .num { font-size: var(--fs-3); font-weight: 600; }
+    .hdr__phone:hover .num { color: var(--color-accent); }
+    .hdr__free { font-size: var(--fs-1); font-weight: 600; color: var(--color-accent); }
+  }
+  @media (min-width: 1280px) {
+    .hdr__email { display: inline; }
+  }
+</style>

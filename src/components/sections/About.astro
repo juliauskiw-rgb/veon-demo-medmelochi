@@ -1,0 +1,53 @@
+---
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import { soon } from "../../data/site";
+
+// W-F003 (ТОВ), business_lines, products_services, geography, positioning (client's own words on the shop).
+// Founding year is not shown (2016 / 2017 differ — W-I003); legal name and ЄДРПОУ are not in the data (R-UX-07).
+const rows = [
+  { k: "Форма", v: "Товариство з обмеженою відповідальністю" },
+  { k: "Що робимо", v: "Імпорт і продаж медичних та ветеринарних товарів" },
+  { k: "Асортимент", v: "11 категорій, понад 2 300 позицій" },
+  { k: "Власна марка", v: "Tisson Medical — інструменти для ветеринарії" },
+  { k: "Географія", v: "Доставка по всій Україні, самовивіз у Київській області" },
+];
+---
+<Section id="about" class="section about" labelledby="about-title">
+  <div class="container about__grid">
+    <div class="about__head">
+      <h2 id="about-title" class="h2">Про компанію MEDmelochi</h2>
+      <p class="about__quote">«Якісне медичне обладнання за доступною ціною»</p>
+      <p class="about__p">Працюємо для лікарень, лабораторій, ветеринарних і стоматологічних клінік, а також для гуртових покупців.</p>
+      <FutureLink note={soon} class="future-text">Відгуки покупців</FutureLink>
+    </div>
+    <dl class="about__rows">
+      {rows.map((r) => (
+        <div class="about__row">
+          <dt>{r.k}</dt>
+          <dd>{r.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</Section>
+
+<style>
+  .about__grid { display: grid; gap: var(--s-4); }
+  .about__quote { margin-top: var(--s-3); font: 500 var(--fs-4)/1.25 var(--font-display); letter-spacing: -0.01em; max-width: 22ch; }
+  .about__p { margin-top: var(--s-2); color: var(--color-muted); max-width: 44ch; }
+  .about__head :global(.future-text) { margin-top: var(--s-2); font-weight: 500; }
+  .about__rows { border-top: 2px solid var(--color-text); }
+  .about__row { display: grid; gap: 4px; padding: var(--s-2) 0; border-bottom: 1px solid var(--color-line); }
+  dt { font-size: var(--fs-1); color: var(--color-muted); }
+  dd { font: 500 var(--fs-3)/1.3 var(--font-display); letter-spacing: -0.01em; }
+
+  @media (min-width: 768px) {
+    .about__row { grid-template-columns: 180px 1fr; gap: var(--gutter); align-items: baseline; padding: var(--s-3) 0; }
+  }
+  @media (min-width: 1024px) {
+    .about__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .about__head { grid-column: 1 / span 5; }
+    .about__rows { grid-column: 6 / span 7; }
+  }
+</style>

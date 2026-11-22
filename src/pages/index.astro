@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CallBar from "../components/CallBar.astro";
+import Hero from "../components/sections/Hero.astro";
+import Catalog from "../components/sections/Catalog.astro";
+import Tisson from "../components/sections/Tisson.astro";
+import Delivery from "../components/sections/Delivery.astro";
+import Wholesale from "../components/sections/Wholesale.astro";
+import About from "../components/sections/About.astro";
+import Contacts from "../components/sections/Contacts.astro";
+import { asset, phones, email, brand } from "../data/site";
+
+const title = "Медичні та ветеринарні товари для клінік | MEDmelochi";
+const description =
+  "Шовний матеріал, хірургічні інструменти, витратні матеріали й обладнання для клінік. Понад 2 300 позицій, опт і дропшипінг. Доставка по Україні 1–3 дні.";
+
+const ld = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "OnlineStore"],
+  name: brand,
+  alternateName: "Мед Мелочи",
+  email,
+  telephone: "0800339619",
+  brand: { "@type": "Brand", name: "Tisson Medical" },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "вул. Тернопільська, 10, прим. 142",
+    addressLocality: "с. Петропавлівська Борщагівка",
+    addressRegion: "Київська область",
+    addressCountry: "UA",
+  },
+  contactPoint: phones.map((p) => ({
+    "@type": "ContactPoint",
+    telephone: p.href.replace("tel:", ""),
+    contactType: p.label === "Адміністрація" ? "administration" : "customer service",
+    areaServed: "UA",
+    availableLanguage: "uk",
+  })),
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "18:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday", "Sunday"], opens: "09:00", closes: "15:00" },
+  ],
+};
+---
+<Base lang="uk" title={title} description={description} metaRec="R-SEO-03">
+  <Fragment slot="head">
+    <link rel="icon" type="image/webp" href={asset("img/logo-mark.webp")} />
+    <script type="application/ld+json" data-rec="R-SEO-05" set:html={JSON.stringify(ld)} />
+  </Fragment>
+  <Header slot="header" />
+  <Hero />
+  <Catalog />
+  <Tisson />
+  <Delivery />
+  <Wholesale />
+  <About />
+  <Contacts />
+  <Footer slot="footer" />
+  <CallBar slot="footer" />
+</Base>
+
+<script>
+  import "../scripts/site.ts";
+</script>

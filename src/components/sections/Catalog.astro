@@ -1,0 +1,269 @@
+---
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import { categories, directions, positions, mailStock, mainPhone, asset, soon, total } from "../../data/site";
+
+const dirName = Object.fromEntries(directions.map((d) => [d.id, d.short]));
+const sums = Object.fromEntries(directions.map((d) => [d.id, categories.filter((c) => c.dir === d.id).reduce((s, c) => s + c.count, 0)]));
+const fmt = (n: number) => n.toLocaleString("uk-UA").replace(/\s/g, " ");
+---
+<Section id="catalog" class="section catalog" rec="R-UX-02" labelledby="catalog-title">
+  <div class="container">
+    <div class="catalog__head">
+      <div class="section-head">
+        <h2 id="catalog-title" class="h2">Каталог за напрямами</h2>
+        <p class="lead">11 категорій, понад 2&nbsp;300 позицій. Площа відсіку — кількість позицій у категорії.</p>
+      </div>
+      <FutureLink note={soon} class="future-text catalog__all">Увесь каталог</FutureLink>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Напрями каталогу" data-tabs>
+      <button class="tab" type="button" role="tab" id="tab-all" aria-selected="true" aria-controls="tray" data-filter="all">
+        <span class="tab__name">Усі</span><span class="tab__count num">{fmt(total)}</span>
+      </button>
+      {directions.map((d) => (
+        <button class="tab" type="button" role="tab" id={`tab-${d.id}`} aria-selected="false" aria-controls="tray" tabindex="-1" data-filter={d.id} data-dir={d.id}>
+          <span class="marker"></span><span class="tab__name">{d.name}</span><span class="tab__count num">{fmt(sums[d.id])}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="tray" id="tray" data-tray aria-labelledby="tab-all">
+      {categories.map((c, i) => (
+        <FutureLink
+          as="div"
+          note={soon}
+          class={`cell cell--${c.size}${c.count >= 299 ? " cell--wide" : ""}`}
+          data-dir={c.dir}
+          data-reveal="tray"
+          style={`--reveal-delay:${i * 40}ms`}
+        >
+          <div class="cell__text">
+            <span class="cell__dir"><span class="marker"></span>{dirName[c.dir]}</span>
+            <h3 class="cell__name">{c.name}</h3>
+            <p class="cell__count"><span class="num">{c.count}</span> {positions(c.count)}</p>
+          </div>
+          <div class="cell__media">
+            <img
+              class="cell__img"
+              src={asset(`img/cat-${c.img}-480.webp`)}
+              srcset={c.w > 240 ? `${asset(`img/cat-${c.img}-240.webp`)} 240w, ${asset(`img/cat-${c.img}-480.webp`)} ${c.w}w` : undefined}
+              sizes={c.size === "xl" ? "(min-width: 1024px) 300px, 160px" : "(min-width: 1024px) 160px, 112px"}
+              width={c.w}
+              height={c.h}
+              alt={c.name}
+              loading={i < 3 ? "eager" : "lazy"}
+              decoding="async"
+            />
+          </div>
+        </FutureLink>
+      ))}
+
+      <div class="cell cell--ask" data-reveal="tray" style={`--reveal-delay:${categories.length * 40}ms`}>
+        <div class="ask__text">
+          <h3 class="ask__title">Не знайшли позицію?</h3>
+          <p class="ask__p">Надішліть перелік — підтвердимо наявність і ціну. Наявність на сайті уточнюємо телефоном.</p>
+        </div>
+        <div class="ask__actions">
+          <a class="btn btn--primary" href={mailStock}>Надіслати перелік</a>
+          <a class="link ask__tel" href={mainPhone.href}><span class="num">{mainPhone.display}</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style is:global>
+  .catalog { padding-top: var(--s-2); }
+  .catalog .lead { max-width: none; }
+  .catalog__head { display: grid; gap: var(--s-1); margin-bottom: var(--s-2); }
+  .catalog__head .section-head { gap: var(--s-1); }
+  .catalog__head .section-head { margin-bottom: 0; }
+  .catalog__all { justify-self: start; font-weight: 500; }
+
+  /* Tabs: only with scripting (they filter the tray). */
+  .tabs { display: none; }
+  .js .tabs {
+    display: flex;
+    gap: var(--s-1);
+    margin: 0 calc(-1 * var(--space)) var(--s-2);
+    padding: 0 var(--space) 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    flex: none;
+    min-height: var(--tap);
+    padding: 0 var(--s-2);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--color-text);
+    font: 500 var(--fs-1)/1.2 var(--font-body);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .tab:hover { border-color: var(--color-border); background: var(--color-surface); }
+  .tab__count { color: var(--color-muted); font-size: var(--fs-1); }
+  .tab::after {
+    content: "";
+    position: absolute;
+    left: var(--s-2);
+    right: var(--s-2);
+    bottom: 6px;
+    height: 3px;
+    background: var(--color-text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms var(--ease-out);
+  }
+  .tab[aria-selected="true"] { background: var(--color-surface); border-color: var(--color-border); font-weight: 600; }
+  .tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+  /* The tray: steel seams between white compartments. */
+  .tray {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--seam);
+    padding: var(--seam);
+    background: var(--color-line);
+    border-radius: var(--radius);
+  }
+  .cell {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 96px;
+    align-items: center;
+    gap: var(--s-2);
+    min-height: 112px;
+    padding: var(--s-2) var(--s-2) var(--s-2) var(--s-2);
+    background: var(--color-surface);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: opacity 240ms var(--ease-out), box-shadow var(--dur-fast) var(--ease-out),
+      transform var(--dur-press) var(--ease-out);
+  }
+  .cell::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--c);
+    transform-origin: left;
+  }
+  .cell.is-hit::before { animation: edge 240ms var(--ease-out); }
+  @keyframes edge { from { transform: scaleX(0); } }
+  .cell__text { display: grid; gap: var(--s-1); align-content: start; min-width: 0; }
+  .cell__dir { display: inline-flex; align-items: center; gap: var(--s-1); font-size: var(--fs-1); color: var(--color-muted); }
+  .cell__dir .marker { width: 8px; height: 8px; }
+  .cell__name { font: 500 var(--fs-2)/1.25 var(--font-body); letter-spacing: 0; overflow-wrap: anywhere; hyphens: auto; }
+  .cell__count { font-size: var(--fs-1); color: var(--color-muted); transition: transform var(--dur-fast) var(--ease-out); }
+  .cell__count .num { font-size: var(--fs-4); font-weight: 600; color: var(--color-text); margin-right: 2px; }
+  .cell__media { display: grid; place-items: center; height: 100%; min-height: 80px; }
+  .cell__img {
+    width: 100%;
+    height: 100%;
+    max-height: 96px;
+    object-fit: contain;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .cell.future-link { cursor: default; }
+  .cell .future-link__note[aria-hidden="true"] { left: auto; right: var(--s-1); top: var(--s-2); transform: translateY(-4px); }
+  .cell.future-link:hover .future-link__note,
+  .cell.future-link:focus .future-link__note { transform: translateY(0); }
+  .cell.future-link:hover { box-shadow: inset 0 0 0 1.5px var(--color-border); }
+  .cell.future-link:active { transform: scale(0.98); }
+  .cell.future-link:focus-visible { outline-offset: -2px; }
+  .cell.is-dim { display: none; }
+  .cell .visually-hidden { top: 0; left: 0; }
+
+  .cell--xl { min-height: 180px; grid-template-columns: minmax(0, 1fr) 140px; }
+  .cell--xl .cell__img { max-height: 150px; }
+  .cell--xl .cell__count .num { font-size: var(--fs-5); }
+
+  .cell--ask { display: grid; grid-template-columns: 1fr; gap: var(--s-2); padding: var(--s-3) var(--s-2); background: var(--color-bg); }
+  .cell--ask::before { display: none; }
+  .ask__title { font-size: var(--fs-4); }
+  .ask__p { margin-top: var(--s-1); color: var(--color-muted); max-width: 44ch; }
+  .ask__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-3); }
+  .ask__tel { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; font-size: var(--fs-3); }
+
+  @media (hover: hover) {
+    .cell.future-link:hover .cell__img { transform: scale(1.03); }
+    .cell.future-link:hover .cell__count { transform: translateY(-4px); }
+  }
+
+  @media (min-width: 360px) and (max-width: 559px) {
+    .tray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-items: start; gap: var(--s-1); padding: var(--s-2) 12px; min-height: 0; }
+    .cell__name { font-size: var(--fs-1); }
+    .cell__count .num { font-size: var(--fs-3); }
+    .cell__media { min-height: 64px; }
+    .cell__img { max-height: 72px; }
+    .cell--wide, .cell--ask { grid-column: 1 / -1; }
+    .cell--wide { grid-template-columns: minmax(0, 1fr) 120px; grid-template-rows: none; align-items: center; padding: var(--s-2); }
+    .cell--wide .cell__name { font-size: var(--fs-2); }
+    .cell--wide .cell__count .num { font-size: var(--fs-4); }
+    .cell--wide .cell__img { max-height: 104px; }
+    .cell--xl .cell__count .num { font-size: var(--fs-5); }
+    .cell--xl .cell__img { max-height: 140px; }
+    .cell .future-link__note[aria-hidden="true"] { right: 4px; top: var(--s-1); font-size: 0.6875rem; }
+  }
+  @media (min-width: 560px) {
+    .tray { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-items: start; min-height: 220px; }
+    .cell__media { min-height: 96px; }
+    .cell__img { max-height: 110px; }
+    .cell--xl, .cell--ask { grid-column: 1 / -1; }
+    .cell--xl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; align-items: center; }
+    .cell--xl .cell__img { max-height: 200px; }
+  }
+
+  @media (min-width: 1024px) {
+    .catalog__head { grid-template-columns: 1fr auto; align-items: end; }
+    .catalog__head .catalog__all { margin-bottom: var(--s-1); }
+    .js .tabs { margin-inline: 0; padding-inline: 0; overflow: visible; flex-wrap: wrap; }
+    .tray {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-rows: 150px;
+      grid-auto-flow: row;
+    }
+    .cell { padding: var(--s-2) var(--s-3) var(--s-2) var(--s-3); min-height: 0; gap: var(--s-1); }
+    .cell--m { grid-column: span 3; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: none; align-items: center; }
+    .cell--m .cell__media { min-height: 0; height: 100px; }
+    .cell--m .cell__img { max-height: 100px; }
+    .cell--l { grid-column: span 3; grid-row: span 2; padding-top: var(--s-3); }
+    .cell--l .cell__media { height: 100%; min-height: 0; }
+    .cell--l .cell__img { max-height: 132px; }
+    .cell--xl { grid-column: span 6; grid-row: span 2; padding: var(--s-3) var(--s-4); }
+    .cell--xl .cell__name { font-size: var(--fs-3); }
+    .cell--xl .cell__count .num { font-size: var(--fs-6); }
+    .cell--xl .cell__img { max-height: 220px; }
+    .cell--ask { grid-column: span 6; grid-template-columns: minmax(0, 1.3fr) auto; align-items: center; padding: var(--s-2) var(--s-3); background: var(--color-surface); }
+    .cell--ask .ask__title { font-size: var(--fs-3); }
+    .cell--ask .ask__p { font-size: var(--fs-1); }
+    .cell--ask .ask__actions { flex-direction: column; align-items: stretch; gap: 0; }
+    .cell--ask .ask__tel { justify-content: center; font-size: var(--fs-2); }
+    /* Desktop: the whole tray stays, other directions step back. */
+    .cell.is-dim { display: grid; opacity: 0.3; }
+  }
+
+  /* Effect 1 «укладання»: compartments settle into the tray, 40 ms step. */
+  .cell[data-reveal] { transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out), box-shadow var(--dur-fast) var(--ease-out); }
+  .js .cell[data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(8px); }
+  @media (max-width: 1023px) {
+    .cell[data-reveal] { transition-delay: 0ms !important; }
+    .js .cell[data-reveal]:not(.is-visible) { transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cell.is-hit::before { animation: none; }
+    .cell.future-link:active { transform: none; }
+    .js .cell[data-reveal]:not(.is-visible) { opacity: 1; transform: none; }
+  }
+</style>

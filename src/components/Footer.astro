@@ -1,0 +1,48 @@
+---
+import Logo from "./Logo.astro";
+import FutureLink from "./FutureLink.astro";
+import { phones, email, soon } from "../data/site";
+
+const legal = ["Повернення та обмін", "Публічна оферта", "Політика конфіденційності", "Статті"];
+const year = new Date().getFullYear();
+---
+<footer class="ftr">
+  <div class="container ftr__grid">
+    <div class="ftr__brand">
+      <Logo />
+      <p class="ftr__p">Медичні та ветеринарні товари для клінік з доставкою по Україні.</p>
+    </div>
+    <ul class="ftr__contacts">
+      {phones.map((p) => (
+        <li><a href={p.href}><span class="num">{p.display}</span></a><span class="ftr__lbl">{p.label}</span></li>
+      ))}
+      <li><a href={`mailto:${email}`}>{email}</a></li>
+    </ul>
+    <ul class="ftr__legal" aria-label="Інформація">
+      {legal.map((l) => <li><FutureLink note={soon} class="future-text">{l}</FutureLink></li>)}
+    </ul>
+    <p class="ftr__copy">© {year} MEDmelochi</p>
+  </div>
+</footer>
+
+<style>
+  .ftr { padding-block: var(--s-5) calc(var(--s-5) + 72px); border-top: 1px solid var(--color-line); font-size: var(--fs-1); }
+  .ftr__grid { display: grid; gap: var(--s-4); }
+  .ftr__p { margin-top: var(--s-2); color: var(--color-muted); max-width: 32ch; }
+  .ftr__contacts { display: grid; gap: 2px; }
+  .ftr__contacts li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--s-2); }
+  .ftr__contacts a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; text-decoration: none; }
+  .ftr__contacts a:hover { color: var(--color-accent); text-decoration: underline; }
+  .ftr__lbl { color: var(--color-muted); }
+  .ftr__legal { display: grid; gap: 0; }
+  .ftr__copy { color: var(--color-muted); }
+
+  @media (min-width: 1024px) {
+    .ftr { padding-bottom: var(--s-5); }
+    .ftr__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .ftr__brand { grid-column: 1 / span 4; }
+    .ftr__contacts { grid-column: 6 / span 4; }
+    .ftr__legal { grid-column: 10 / span 3; }
+    .ftr__copy { grid-column: 1 / -1; padding-top: var(--s-3); border-top: 1px solid var(--color-line); }
+  }
+</style>

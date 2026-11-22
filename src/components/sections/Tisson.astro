@@ -1,0 +1,90 @@
+---
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import PhoneIcon from "../PhoneIcon.astro";
+import { asset, mainPhone, soon } from "../../data/site";
+
+// Photos: client's own product photos from the shop (watermark cropped), stored locally.
+const items = [
+  { img: "tisson-nejlon", w: 560, h: 274, cap: "Нейлон Tisson Medical, шовний матеріал для ветеринарної медицини" },
+  { img: "tisson-pga-kaseta", w: 463, h: 560, cap: "ПГА Tisson Medical у касеті, 25 м" },
+  { img: "tisson-kateter", w: 560, h: 233, cap: "Катетер уретральний Tisson Medical для собак" },
+];
+---
+<Section id="tisson" class="tisson" rec="R-UX-14" labelledby="tisson-title">
+  <div class="container">
+    <div class="tisson__box" data-dir="vet">
+      <div class="tisson__text">
+        <h2 id="tisson-title" class="tisson__title">Tisson Medical&nbsp;— власна марка для ветеринарії</h2>
+        <p class="tisson__p">Власна марка інструментів: виробництво — Пакистан, призначення — ветеринарна медицина. Склад асортименту й наявність уточнимо телефоном.</p>
+        <div class="tisson__actions">
+          <a class="btn btn--primary" href={mainPhone.href}><PhoneIcon /><span>Уточнити асортимент</span></a>
+          <FutureLink note={soon} class="future-text tisson__more">Каталог Tisson Medical</FutureLink>
+        </div>
+      </div>
+      <ul class="tisson__items">
+        {items.map((it, i) => (
+          <li class="tisson__item">
+            <figure>
+              <div class="tisson__ph">
+                <img
+                  src={asset(`img/${it.img}-560.webp`)}
+                  srcset={`${asset(`img/${it.img}-280.webp`)} 280w, ${asset(`img/${it.img}-560.webp`)} ${it.w}w`}
+                  sizes="(min-width: 1024px) 220px, (min-width: 560px) 30vw, 80vw"
+                  width={it.w}
+                  height={it.h}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption>{it.cap}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .tisson__box {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-3);
+    background: var(--code-vet);
+    color: var(--color-text);
+    border-radius: var(--radius);
+  }
+  .tisson__title { font-size: var(--fs-5); line-height: var(--lh-head); max-width: 16ch; }
+  .tisson__p { margin-top: var(--s-2); font-size: var(--fs-2); max-width: 44ch; }
+  .tisson__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-3); margin-top: var(--s-3); }
+  .tisson__more { color: var(--color-text); font-weight: 500; text-decoration-color: var(--color-text); }
+  .tisson__items { display: grid; gap: var(--seam); }
+  .tisson__ph {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    padding: var(--s-2);
+    background: var(--color-surface);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .tisson__ph img { width: 100%; height: 100%; object-fit: contain; }
+  figcaption { margin-top: var(--s-1); font-size: var(--fs-1); line-height: 1.35; font-weight: 500; }
+  @media (max-width: 559px) {
+    .tisson__items { gap: var(--s-1); }
+    figure { display: grid; grid-template-columns: 112px 1fr; align-items: center; gap: var(--s-2); }
+    .tisson__ph { padding: var(--s-1); }
+    figcaption { margin-top: 0; }
+  }
+
+  @media (min-width: 560px) {
+    .tisson__items { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); }
+  }
+  @media (min-width: 1024px) {
+    .tisson__box { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); padding: var(--s-5) var(--s-5); align-items: center; }
+    .tisson__text { grid-column: 1 / span 5; }
+    .tisson__items { grid-column: 6 / span 7; }
+  }
+</style>

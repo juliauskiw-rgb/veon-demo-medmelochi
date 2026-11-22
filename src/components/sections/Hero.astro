@@ -1,0 +1,73 @@
+---
+import Section from "../Section.astro";
+import PhoneIcon from "../PhoneIcon.astro";
+import { mainPhone, email, mailStock, hours } from "../../data/site";
+
+const h1 = "Медичні та ветеринарні інструменти й витратні матеріали для клінік";
+---
+<Section id="hero" class="hero" rec="R-UX-01,M-R004" labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__text">
+      <h1 id="hero-title" class="hero__title" data-rec="R-SEO-04">{h1}</h1>
+      <p class="hero__lead">
+        Понад 2&nbsp;300 позицій і власна марка Tisson Medical. Наявність і ціну підтвердимо телефоном, відправка Новою Поштою за 1–3 робочі дні.
+      </p>
+      <ul class="hero__facts" aria-label="Коротко про умови">
+        <li>Нова Пошта по всій Україні</li>
+        <li>Замовлення від 1&nbsp;000 грн</li>
+        <li>Опт і дропшипінг</li>
+      </ul>
+    </div>
+
+    <aside class="act" aria-label="Звʼязатися з нами" data-rec="R-UX-03,R-UX-10">
+      <a class="act__call btn btn--primary" href={mainPhone.href}>
+        <PhoneIcon />
+        <span class="act__call-text">
+          <span class="act__call-label">Зателефонувати безкоштовно</span>
+          <span class="act__call-num num">{mainPhone.display}</span>
+        </span>
+      </a>
+      <div class="act__mail">
+        <a class="link" href={mailStock}>Надіслати перелік на e-mail</a>
+        <button class="copy" type="button" data-copy={email} aria-label={`Скопіювати адресу ${email}`}>Скопіювати</button>
+      </div>
+      <p class="act__note">Надішліть назви або коди позицій — підтвердимо наявність і ціну.</p>
+      <p class="status" data-hours>
+        <span class="status__dot" aria-hidden="true"></span>
+        <span class="status__text" data-hours-text>{hours.map((h) => `${h.short} ${h.open}–${h.close}`).join(", ")}</span>
+      </p>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .hero { padding-block: var(--s-3) var(--s-3); }
+  .hero__grid { display: grid; gap: var(--s-4); }
+  .hero__title { font-size: var(--fs-6); line-height: var(--lh-tight); font-weight: 600; max-width: 22ch; }
+  .hero__lead { margin-top: var(--s-2); font-size: var(--fs-3); line-height: 1.45; color: var(--color-muted); max-width: 46ch; }
+  .hero__facts { display: flex; flex-wrap: wrap; gap: 4px var(--s-2); margin-top: var(--s-2); font-size: var(--fs-1); line-height: 1.3; font-weight: 500; }
+  @media (min-width: 1024px) { .hero__facts { gap: var(--s-1) var(--s-3); margin-top: var(--s-3); } }
+  .hero__facts li { display: inline-flex; align-items: center; gap: var(--s-1); }
+  .hero__facts li::before { content: ""; width: 8px; height: 2px; background: var(--color-text); }
+
+  .act { display: grid; gap: var(--s-2); align-content: start; }
+  .act__call { width: 100%; min-height: 64px; justify-content: flex-start; padding: var(--s-1) var(--s-3); gap: var(--s-2); }
+  .act__call-text { display: grid; text-align: left; gap: 2px; }
+  .act__call-label { font-size: var(--fs-1); font-weight: 500; opacity: 0.86; }
+  .act__call-num { font-size: var(--fs-3); font-weight: 600; letter-spacing: -0.01em; }
+  .act__mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--s-2); font-weight: 500; }
+  .act__mail .link { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .act__note { font-size: var(--fs-1); color: var(--color-muted); max-width: 36ch; }
+
+  .status { display: flex; align-items: center; gap: var(--s-1); padding-top: var(--s-2); border-top: 1px solid var(--color-line); font-size: var(--fs-1); font-weight: 500; }
+  .status__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); flex: none; }
+  .status[data-open="true"] .status__dot { background: var(--code-surgery); }
+
+  @media (min-width: 1024px) {
+    .hero { padding-block: var(--s-4) var(--s-3); }
+    .hero__title { max-width: none; }
+    .hero__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; }
+    .hero__text { grid-column: 1 / span 8; }
+    .act { grid-column: 9 / span 4; padding: var(--s-3); background: var(--color-surface); border-radius: var(--radius); }
+  }
+</style>

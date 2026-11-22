@@ -1,0 +1,94 @@
+---
+import Section from "../Section.astro";
+import FutureLink from "../FutureLink.astro";
+import { mailDealer, mainPhone, soon } from "../../data/site";
+
+// business_lines[2], W-F008. Concrete discounts or volumes are not in the data — not written.
+const offers = [
+  { t: "Дилерський прайс", d: "Окремий прайс для гуртових покупців." },
+  { t: "Індивідуальні ціни", d: "Ціну обговорюємо під ваші обсяги." },
+  { t: "Товар під реалізацію", d: "Для партнерів, які продають далі." },
+  { t: "Дропшипінг", d: "Відправляємо замовлення ваших покупців." },
+  { t: "Партнерська програма", d: "Умови — за запитом." },
+  { t: "Кабінет гуртового клієнта", d: "Окремий кабінет для гуртових покупців.", future: true },
+];
+const steps = ["Напишіть або зателефонуйте", "Отримайте дилерський прайс", "Працюйте через кабінет гуртового клієнта"];
+---
+<Section id="wholesale" class="section wholesale on-dark" rec="R-UX-06,M-R007" labelledby="wholesale-title">
+  <div class="container wholesale__grid">
+    <div class="wholesale__head">
+      <h2 id="wholesale-title" class="wholesale__title">Гуртовим клієнтам і дропшипінг</h2>
+      <p class="wholesale__lead">Для оптових покупців, перепродавців і партнерів, що працюють за дропшипінгом.</p>
+      <div class="wholesale__actions">
+        <a class="btn btn--light" href={mailDealer}>Запросити дилерський прайс</a>
+        <a class="btn btn--ghost-light" href={mainPhone.href}><span class="num">{mainPhone.display}</span></a>
+      </div>
+    </div>
+
+    <ul class="offers">
+      {offers.map((o) => (
+        <li class="offer">
+          {o.future ? (
+            <FutureLink note={soon} class="offer__t future-text">{o.t}</FutureLink>
+          ) : (
+            <h3 class="offer__t">{o.t}</h3>
+          )}
+          <p class="offer__d">{o.d}</p>
+        </li>
+      ))}
+    </ul>
+
+    <ol class="steps" aria-label="Як почати співпрацю">
+      {steps.map((s, i) => (
+        <li class="step"><span class="step__n num">{i + 1}</span><span>{s}</span></li>
+      ))}
+    </ol>
+  </div>
+</Section>
+
+<style>
+  .wholesale { background: var(--color-dark); color: var(--color-on-dark); }
+  .wholesale__grid { display: grid; gap: var(--s-5); }
+  .wholesale__title { font-size: var(--fs-6); line-height: var(--lh-tight); max-width: 14ch; }
+  .wholesale__lead { margin-top: var(--s-3); font-size: var(--fs-3); line-height: 1.4; color: var(--color-on-dark-muted); max-width: 36ch; }
+  .wholesale__actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); }
+  @media (max-width: 359px) { .wholesale__actions .btn { padding-inline: var(--s-2); font-size: var(--fs-1); } }
+
+  .offers { display: grid; border-top: 1px solid var(--color-primary-hover); }
+  .offer { display: grid; gap: 4px; padding: var(--s-3) 0; border-bottom: 1px solid var(--color-primary-hover); }
+  .offer__t { font: 600 var(--fs-3)/1.25 var(--font-display); letter-spacing: -0.01em; color: var(--color-on-dark); }
+  .offer :global(.future-text.offer__t) { min-height: 0; justify-self: start; }
+  .offer__d { color: var(--color-on-dark-muted); }
+
+  .steps { display: grid; gap: var(--s-2); counter-reset: none; }
+  .step { display: flex; align-items: center; gap: var(--s-2); font-weight: 500; }
+  .step__n {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border: 1.5px solid var(--color-on-dark-muted);
+    border-radius: 50%;
+    font-size: var(--fs-2);
+  }
+
+  @media (min-width: 768px) {
+    .offers { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+    .step { position: relative; }
+  }
+  @media (min-width: 1024px) {
+    .wholesale__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s-5); }
+    .wholesale__head { grid-column: 1 / span 5; }
+    .offers { grid-column: 7 / span 6; align-self: start; }
+    .steps { grid-column: 1 / -1; padding-top: var(--s-4); border-top: 1px solid var(--color-primary-hover); }
+    .step:not(:last-child)::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      margin-left: var(--s-1);
+      background: var(--color-on-dark-muted);
+    }
+  }
+</style>

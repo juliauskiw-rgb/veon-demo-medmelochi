@@ -1,0 +1,93 @@
+---
+import Section from "../Section.astro";
+import { phones, email, mailStock, address, hours } from "../../data/site";
+---
+<Section id="contacts" class="section contacts" rec="R-UX-03" labelledby="contacts-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="contacts-title" class="h2">Контакти</h2>
+    </div>
+
+    <div class="contacts__grid">
+      <ul class="phones">
+        {phones.map((p, i) => (
+          <li class:list={["phone", { "phone--main": i === 0 }]}>
+            <span class="phone__label">{p.label}</span>
+            <a class="phone__num num" href={p.href}>{p.display}</a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="cinfo">
+        <div class="cinfo__block">
+          <h3 class="cinfo__h">E-mail</h3>
+          <p class="cinfo__mail">
+            <a class="link" href={mailStock}>{email}</a>
+            <button class="copy" type="button" data-copy={email} aria-label={`Скопіювати адресу ${email}`}>Скопіювати</button>
+          </p>
+        </div>
+        <div class="cinfo__block">
+          <h3 class="cinfo__h">Самовивіз</h3>
+          <address class="cinfo__addr">{address.line1},<br />{address.line2}</address>
+          <a class="link cinfo__map" href={address.map} target="_blank" rel="noopener">Маршрут на карті</a>
+        </div>
+        <div class="cinfo__block">
+          <h3 class="cinfo__h">Графік роботи</h3>
+          <table class="hours">
+            <tbody>
+              {hours.map((h) => (
+                <tr><th scope="row">{h.short}</th><td class="num">{h.open}–{h.close}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="status" data-hours hidden>
+            <span class="status__dot" aria-hidden="true"></span>
+            <span data-hours-text></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .contacts { padding-top: var(--s-5); padding-bottom: var(--s-5); }
+  .contacts__grid { display: grid; gap: var(--s-5); }
+  .phones { display: grid; border-top: 2px solid var(--color-text); }
+  .phone { display: grid; gap: 2px; padding: var(--s-3) 0; border-bottom: 1px solid var(--color-line); }
+  .phone__label { font-size: var(--fs-1); color: var(--color-muted); font-weight: 500; }
+  .phone__num {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    font-size: var(--fs-5);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .phone__num:hover { color: var(--color-accent); }
+  .phone--main .phone__label { color: var(--color-accent); font-weight: 600; }
+  .phone--main .phone__num { font-size: var(--fs-6); }
+
+  .cinfo { display: grid; gap: var(--s-4); align-content: start; }
+  .cinfo__h { font: 600 var(--fs-1)/1.3 var(--font-body); letter-spacing: 0; color: var(--color-muted); margin-bottom: var(--s-1); }
+  .cinfo__mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--s-2); font-size: var(--fs-3); font-weight: 500; }
+  .cinfo__mail .link { display: inline-flex; align-items: center; min-height: var(--tap); overflow-wrap: anywhere; }
+  .cinfo__addr { font-style: normal; font-size: var(--fs-2); }
+  .cinfo__map { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 500; }
+  .hours { border-collapse: collapse; font-size: var(--fs-2); }
+  .hours th { text-align: left; font-weight: 400; padding: 4px var(--s-3) 4px 0; }
+  .hours td { font-weight: 600; font-family: var(--font-display); }
+  .status { display: flex; align-items: center; gap: var(--s-1); margin-top: var(--s-2); font-size: var(--fs-1); font-weight: 500; }
+  .status[hidden] { display: none; }
+  .status__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); }
+  .status[data-open="true"] .status__dot { background: var(--code-surgery); }
+
+  @media (min-width: 1024px) {
+    .contacts__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .phones { grid-column: 1 / span 7; }
+    .cinfo { grid-column: 9 / span 4; padding-top: var(--s-3); }
+  }
+</style>

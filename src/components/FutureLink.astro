@@ -1,0 +1,13 @@
+---
+// A future page that is not built in the demo yet (menu item, button, card, footer link).
+// Renders an inactive element with a short note instead of a link: never point it to the client's current site.
+// `note` is written in the project language: «Розділ у розробці».
+// `as="div"` lets a whole card (with a heading inside) be the inactive item; other attributes pass through.
+interface Props { note: string; class?: string; as?: "span" | "div"; [key: string]: unknown; }
+const { note, class: cls, as: Tag = "span", ...rest } = Astro.props;
+---
+<Tag class:list={["future-link", cls]} role="link" aria-disabled="true" tabindex="0" {...rest}>
+  <slot />
+  <span class="future-link__note" aria-hidden="true">{note}</span>
+  <span class="visually-hidden">({note})</span>
+</Tag>

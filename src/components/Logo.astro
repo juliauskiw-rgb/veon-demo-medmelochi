@@ -1,0 +1,19 @@
+---
+import { asset, brand } from "../data/site";
+interface Props { class?: string; }
+const { class: cls } = Astro.props;
+---
+<a href="#top" class:list={["logo", cls]} aria-label={`${brand} — на початок сторінки`} data-rec="R-UX-12">
+  <img class="logo__mark" src={asset("img/logo-mark.webp")} width="136" height="132" alt="" decoding="async" />
+  <img class="logo__word" src={asset("img/logo-word.webp")} width="437" height="66" alt="" decoding="async" />
+</a>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: var(--s-1); min-height: var(--tap); text-decoration: none; border-radius: var(--radius); flex: none; }
+  .logo__mark { width: auto; height: 36px; }
+  .logo__word { width: auto; height: 17px; }
+  @media (max-width: 359px) { .logo__word { display: none; } }
+  @media (min-width: 1024px) {
+    .logo__mark { height: 42px; }
+    .logo__word { height: 20px; }
+  }
+</style>

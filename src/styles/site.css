@@ -1,0 +1,124 @@
+/* MEDmelochi — shared styles. Values only from tokens.css. */
+html { overflow-x: clip; scrollbar-color: var(--color-border) var(--color-bg); }
+body { overflow-x: clip; }
+::selection { background: var(--color-text); color: var(--color-bg); }
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-2);
+  line-height: var(--lh-text);
+  font-synthesis: none;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; line-height: var(--lh-head); }
+p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+.num {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Focus: 2px ring + 2px gap; on dark sections the light-blue ring. */
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.on-dark :focus-visible { outline-color: var(--color-focus-dark); }
+.skip-link { border-radius: var(--radius); font-weight: 600; }
+
+.section { padding-block: var(--section); }
+.section-head { display: grid; gap: var(--s-2); margin-bottom: var(--s-4); }
+.h2 { font-size: var(--fs-5); line-height: var(--lh-head); max-width: 22ch; }
+.lead { font-size: var(--fs-3); line-height: 1.4; color: var(--color-muted); max-width: 52ch; }
+.text-muted { color: var(--color-muted); }
+
+/* Links */
+.link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-fast) var(--ease-out), text-decoration-thickness var(--dur-fast) var(--ease-out);
+}
+.link:hover { color: var(--color-accent-hover); text-decoration-thickness: 2px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-3);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius);
+  font: 600 var(--fs-2)/1.2 var(--font-body);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out), transform var(--dur-press) var(--ease-out);
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; cursor: default; transform: none; }
+.btn--primary { background: var(--color-primary); color: var(--color-surface); }
+.btn--primary:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
+.btn--secondary { background: transparent; color: var(--color-text); }
+.btn--secondary:hover { background: var(--color-surface); }
+.btn--light { background: var(--color-on-dark); color: var(--color-dark); border-color: var(--color-on-dark); }
+.btn--light:hover { background: var(--color-surface); border-color: var(--color-surface); }
+.btn--ghost-light { background: transparent; color: var(--color-on-dark); border-color: var(--color-on-dark-muted); }
+.btn--ghost-light:hover { border-color: var(--color-on-dark); background: var(--color-primary-hover); }
+.btn__icon { width: 20px; height: 20px; flex: none; }
+
+/* Copy-to-clipboard button: only with scripting. */
+.copy { display: none; }
+.js .copy { display: inline-flex; }
+.copy {
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--s-1);
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  font: 500 var(--fs-1)/1 var(--font-body);
+  text-decoration: underline dotted;
+  text-underline-offset: 0.25em;
+  cursor: pointer;
+  border-radius: var(--radius);
+}
+.copy:hover { color: var(--color-text); }
+.copy[data-done] { color: var(--color-text); text-decoration: none; }
+
+/* FutureLink — inactive item for a page of the full site. Looks like part of the design, not an error. */
+.future-link { color: inherit; }
+.future-link:focus .future-link__note,
+.future-link:hover .future-link__note { opacity: 1; transform: translate(-50%, 0); }
+.future-link__note { font-family: var(--font-body); font-weight: 500; letter-spacing: 0; }
+.future-text {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--color-muted);
+  text-decoration: underline dashed var(--color-border);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+.future-text:hover { color: var(--color-text); }
+.on-dark .future-text { color: var(--color-on-dark-muted); text-decoration-color: var(--color-on-dark-muted); }
+.on-dark .future-text:hover { color: var(--color-on-dark); }
+.on-dark .future-link__note { background: var(--color-on-dark); color: var(--color-dark); }
+
+/* Direction marker: a small square in the logo colour, always next to a text name. */
+.marker { display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex: none; background: var(--c, var(--color-border)); }
+[data-dir="surgery"] { --c: var(--code-surgery); }
+[data-dir="consumables"] { --c: var(--code-consumables); }
+[data-dir="lab"] { --c: var(--code-lab); }
+[data-dir="vet"] { --c: var(--code-vet); }
+
+/* Reveal hook defaults for this site: small lift, not the base 24px. */
+.js [data-reveal]:not(.is-visible) { transform: translateY(12px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active { transform: none; }
+}

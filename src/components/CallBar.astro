@@ -1,0 +1,42 @@
+---
+import PhoneIcon from "./PhoneIcon.astro";
+import { mainPhone } from "../data/site";
+---
+<div class="callbar" data-callbar data-rec="R-UX-03">
+  <a class="btn btn--primary callbar__btn" href={mainPhone.href}>
+    <PhoneIcon />
+    <span class="callbar__text">
+      <span class="callbar__label">Зателефонувати безкоштовно</span>
+      <span class="num callbar__num">{mainPhone.display}</span>
+    </span>
+  </a>
+</div>
+
+<style>
+  /* Phones only: appears after the first screen, never covers content (footer has room below). */
+  .callbar { display: none; }
+  @media (max-width: 1023px) {
+    :global([data-js-callbar]) .callbar {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      padding: var(--s-1) var(--space) calc(var(--s-1) + env(safe-area-inset-bottom));
+      background: var(--color-bg);
+      border-top: 1px solid var(--color-line);
+      transform: translateY(100%);
+      visibility: hidden;
+      transition: transform 240ms var(--ease-out), visibility 0s linear 240ms;
+    }
+    :global([data-js-callbar]) .callbar.is-shown { transform: none; visibility: visible; transition: transform 240ms var(--ease-out), visibility 0s; }
+  }
+  .callbar__btn { width: 100%; min-height: 52px; justify-content: flex-start; gap: var(--s-2); padding: 4px var(--s-2); }
+  .callbar__text { display: grid; gap: 0; min-width: 0; text-align: left; }
+  .callbar__label { font-size: 0.8125rem; font-weight: 500; line-height: 1.2; }
+  .callbar__num { font-size: var(--fs-2); line-height: 1.2; }
+  @media (prefers-reduced-motion: reduce) {
+    :global([data-js-callbar]) .callbar, :global([data-js-callbar]) .callbar.is-shown { transition: none; }
+  }
+</style>

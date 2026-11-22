@@ -1,0 +1,112 @@
+---
+import Section from "../Section.astro";
+import { address } from "../../data/site";
+
+// W-F005, W-F006, geography. Scale 0 … 6000 грн, so 5000 sits at 83 %.
+const marks = [
+  { at: 16.67, sum: "1 000", title: "Мінімальне замовлення", text: "Від цієї суми приймаємо замовлення." },
+  { at: 41.67, sum: "2 500", title: "Безкоштовна доставка у відділення", text: "Нова Пошта у відділення, а також курʼєр по Києву — безкоштовно." },
+  { at: 83.33, sum: "5 000", title: "Безкоштовна адресна доставка", text: "Нова Пошта до дверей — безкоштовно." },
+];
+const facts = [
+  { k: "Відправка", v: "1–3 робочі дні після підтвердження замовлення." },
+  { k: "Оплата", v: "Післяплата, готівка або безготівковий розрахунок." },
+  { k: "Курʼєр по Києву", v: "Середа та пʼятниця, 150 грн; від 2 500 грн — безкоштовно." },
+  { k: "Самовивіз", v: `Безкоштовно: ${address.line2}.` },
+];
+---
+<Section id="delivery" class="section delivery" labelledby="delivery-title">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="delivery-title" class="h2">Доставка та оплата</h2>
+      <p class="lead">По всій Україні Новою Поштою. Що залежить від суми замовлення — на шкалі.</p>
+    </div>
+
+    <div class="ruler" data-reveal="ruler">
+      <div class="ruler__track" aria-hidden="true">
+        <span class="ruler__fill"></span>
+        <span class="ruler__zero num">0 грн</span>
+      </div>
+      <ol class="ruler__marks">
+        {marks.map((m, i) => (
+          <li class="mark" style={`--at:${m.at}%; --i:${i}`}>
+            <p class="mark__sum"><span class="num">{m.sum}</span> грн</p>
+            <h3 class="mark__title">{m.title}</h3>
+            <p class="mark__text">{m.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <dl class="dfacts">
+      {facts.map((f) => (
+        <div class="dfacts__row">
+          <dt>{f.k}</dt>
+          <dd>{f.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</Section>
+
+<style>
+  /* Mobile: vertical ruler. */
+  .ruler { position: relative; padding-left: var(--s-4); }
+  .ruler__track { position: absolute; left: 8px; top: 6px; bottom: 6px; width: 4px; background: var(--color-line); border-radius: 2px; }
+  .ruler__fill { position: absolute; inset: 0; background: var(--color-text); border-radius: 2px; transform-origin: top; transition: transform 500ms var(--ease-out); }
+  .ruler__zero { display: none; }
+  .ruler__marks { display: grid; gap: var(--s-4); }
+  .mark { position: relative; }
+  .mark::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--s-4) + 2px);
+    top: 0.6em;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 4px solid var(--color-text);
+  }
+  .mark__sum { font-size: var(--fs-3); font-weight: 500; white-space: nowrap; }
+  .mark__sum .num { font-size: var(--fs-6); font-weight: 600; line-height: 1; margin-right: 4px; }
+  .mark__title { margin-top: var(--s-1); font: 600 var(--fs-2)/1.3 var(--font-body); letter-spacing: 0; }
+  .mark__text { margin-top: 4px; color: var(--color-muted); max-width: 30ch; }
+  .mark { transition: opacity 200ms var(--ease-out); transition-delay: calc(300ms + var(--i) * 120ms); }
+
+  .dfacts { display: grid; gap: var(--seam); margin-top: var(--s-5); padding: var(--seam); background: var(--color-line); border-radius: var(--radius); }
+  .dfacts__row { display: grid; gap: 4px; padding: var(--s-3) var(--s-2); background: var(--color-surface); border-radius: 2px; }
+  dt { font-weight: 600; }
+  dd { color: var(--color-muted); }
+
+  @media (min-width: 768px) {
+    .dfacts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  /* Desktop: horizontal measuring line, marks placed by real sum. */
+  @media (min-width: 1024px) {
+    .ruler { padding-left: 0; padding-top: var(--s-4); }
+    .ruler__track { left: 0; right: 0; top: 0; bottom: auto; width: auto; height: 4px; }
+    .ruler__fill { transform-origin: left; transition-duration: 700ms; }
+    .ruler__zero { display: block; position: absolute; left: 0; top: var(--s-2); font-size: var(--fs-1); color: var(--color-muted); }
+    .ruler__track::after { content: "5 000+ грн"; position: absolute; right: 0; top: var(--s-2); font: 500 var(--fs-1)/1 var(--font-display); color: var(--color-muted); }
+    .ruler__marks { position: relative; display: block; height: 210px; }
+    .mark { position: absolute; left: var(--at); top: var(--s-4); width: 25%; padding-left: var(--s-2); border-left: 1px solid var(--color-border); padding-top: 0; }
+    .mark:last-child { width: 16.67%; }
+    .mark::before { left: -8px; top: calc(-1 * var(--s-4) - var(--s-4) - 6px); }
+    .mark__sum .num { font-size: var(--fs-5); }
+    .dfacts { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: var(--s-4); }
+  }
+
+  /* Effect 4: the scale fills once, marks appear after it. */
+  :global(.js) .ruler:not(.is-visible) .ruler__fill { transform: scaleY(0); }
+  :global(.js) .ruler:not(.is-visible) .mark { opacity: 0; }
+  @media (min-width: 1024px) {
+    :global(.js) .ruler:not(.is-visible) .ruler__fill { transform: scaleX(0); }
+  }
+  .ruler[data-reveal] { transform: none !important; opacity: 1 !important; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .ruler:not(.is-visible) .ruler__fill { transform: none; }
+    :global(.js) .ruler:not(.is-visible) .mark { opacity: 1; }
+  }
+</style>
